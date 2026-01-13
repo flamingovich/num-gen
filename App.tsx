@@ -36,15 +36,20 @@ const App: React.FC = () => {
   const getRandomChar = () => VALID_CHARS[Math.floor(Math.random() * VALID_CHARS.length)];
   const getRandomDigit = () => Math.floor(Math.random() * 10).toString();
 
-  const handleGenerate = () => {
+  const handleGenerate = (isSpecial: boolean = false) => {
     if (isGenerating) return;
     setIsGenerating(true);
 
+    const specialDigit = Math.floor(Math.random() * 9 + 1).toString(); // 1-9
+    const finalNumbers = isSpecial 
+      ? specialDigit.repeat(3) 
+      : Array(3).fill(0).map(() => getRandomDigit()).join('');
+
     const final = {
-      firstLetter: getRandomChar(),
-      numbers: Array(3).fill(0).map(() => getRandomDigit()).join(''),
-      secondLetter: getRandomChar(),
-      thirdLetter: getRandomChar(),
+      firstLetter: isSpecial ? getRandomChar() : getRandomChar(),
+      numbers: finalNumbers,
+      secondLetter: isSpecial ? getRandomChar() : getRandomChar(),
+      thirdLetter: isSpecial ? getRandomChar() : getRandomChar(),
       region: plateData.region || '777'
     };
     finalDataRef.current = final;
@@ -53,7 +58,7 @@ const App: React.FC = () => {
     shufflingRef.current = initialShuffling;
     setShufflingStates(initialShuffling);
 
-    // Faster interval for smoother animation (30ms = ~33fps)
+    // Частота смены символов ускорена до 70мс для более динамичного процесса.
     const shuffleInterval = setInterval(() => {
       setPlateData(prev => {
         const finalDigits = finalDataRef.current?.numbers.split('') || ['0', '0', '0'];
@@ -69,9 +74,9 @@ const App: React.FC = () => {
           thirdLetter: shufflingRef.current[5] ? getRandomChar() : finalDataRef.current!.thirdLetter,
         };
       });
-    }, 35);
+    }, 70);
 
-    // Optimized locking sequence: Faster overall but smooth one-by-one locking
+    // Последовательная фиксация символов ускорена (300мс - 200мс)
     const lockSymbol = (index: number) => {
       if (index >= 6) {
         clearInterval(shuffleInterval);
@@ -79,9 +84,8 @@ const App: React.FC = () => {
         return;
       }
 
-      // First symbol spins for 700ms, then each next one takes 300ms more.
-      // Total time approx: 0.7 + 0.3*5 = 2.2 seconds (vs ~4s before)
-      const delay = index === 0 ? 700 : 300;
+      // Пауза перед фиксацией каждого следующего символа сокращена для динамики
+      const delay = index === 0 ? 400 : 250;
 
       setTimeout(() => {
         const nextShuffling = [...shufflingRef.current];
@@ -143,7 +147,7 @@ const App: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-10">
-           <div className="hidden lg:flex items-center gap-3 border-r border-white/10 pr-10">
+           <div className="hidden lg:flex items-center gap-3">
               <div className="w-2.5 h-2.5 rounded-full bg-yellow-400 shadow-[0_0_10px_#facc15]"></div>
               <div className="flex flex-col">
                 <span className="text-[9px] text-white/30 uppercase font-black">Терминал</span>
@@ -168,7 +172,7 @@ const App: React.FC = () => {
         {/* The License Plate */}
         <div className="relative group perspective-1000">
            <div className="absolute inset-0 bg-yellow-400/5 blur-[100px] opacity-40"></div>
-           <div className="relative z-10 transition-all duration-500 group-hover:scale-[1.02]">
+           <div className="relative z-10 transition-all duration-500">
               <LicensePlate data={plateData} shufflingStates={shufflingStates} />
            </div>
         </div>
@@ -185,18 +189,7 @@ const App: React.FC = () => {
       </main>
 
       {/* Global Status Bar */}
-      <footer className="w-full px-12 py-6 bg-black/80 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 z-20">
-        <div className="flex items-center gap-12 text-white/40">
-           <div className="flex flex-col">
-              <span className="text-[8px] uppercase font-black tracking-widest mb-1">Версия протокола</span>
-              <span className="text-[10px] font-mono tracking-widest">MJ-V4.9-STABLE</span>
-           </div>
-           <div className="flex flex-col border-l border-white/10 pl-12">
-              <span className="text-[8px] uppercase font-black tracking-widest mb-1">Местоположение</span>
-              <span className="text-[10px] font-bold uppercase rp-font">Los Santos, Mission Row</span>
-           </div>
-        </div>
-
+      <footer className="w-full px-12 py-6 bg-black/80 border-t border-white/5 flex items-center justify-end z-20">
         <div className="flex items-center gap-6">
             <input type="file" ref={fileInputRef} className="hidden" accept=".otf" onChange={handleFontUpload} />
             <button 

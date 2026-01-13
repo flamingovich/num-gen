@@ -27,7 +27,7 @@ const LicensePlate: React.FC<LicensePlateProps> = ({ data, shufflingStates }) =>
           <div className="flex items-center justify-center translate-y-[10px]">
             {/* First Letter (Index 0) */}
             <span className={`text-black text-[108px] leading-none gost-font select-none uppercase mr-1 inline-block
-              ${shufflingStates[0] ? 'animate-shuffling' : 'animate-pop'}`}>
+              ${shufflingStates[0] ? 'animate-shuffling' : ''}`}>
               {data.firstLetter}
             </span>
             
@@ -37,7 +37,7 @@ const LicensePlate: React.FC<LicensePlateProps> = ({ data, shufflingStates }) =>
                 <span 
                   key={`digit-${idx}`}
                   className={`text-black text-[126px] leading-none gost-font tracking-normal select-none inline-block
-                  ${shufflingStates[idx + 1] ? 'animate-shuffling' : 'animate-pop'}`}
+                  ${shufflingStates[idx + 1] ? 'animate-shuffling' : ''}`}
                 >
                   {digit}
                 </span>
@@ -47,11 +47,11 @@ const LicensePlate: React.FC<LicensePlateProps> = ({ data, shufflingStates }) =>
             {/* Second & Third Letters (Indices 4, 5) */}
             <div className="flex gap-1 items-center ml-1">
               <span className={`text-black text-[108px] leading-none gost-font select-none uppercase inline-block
-                ${shufflingStates[4] ? 'animate-shuffling' : 'animate-pop'}`}>
+                ${shufflingStates[4] ? 'animate-shuffling' : ''}`}>
                 {data.secondLetter}
               </span>
               <span className={`text-black text-[108px] leading-none gost-font select-none uppercase inline-block
-                ${shufflingStates[5] ? 'animate-shuffling' : 'animate-pop'}`}>
+                ${shufflingStates[5] ? 'animate-shuffling' : ''}`}>
                 {data.thirdLetter}
               </span>
             </div>

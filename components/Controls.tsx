@@ -1,11 +1,11 @@
 
 import React from 'react';
-import { PlateData } from '../types.ts';
+import { PlateData, REGION_NAMES } from '../types.ts';
 
 interface ControlsProps {
   data: PlateData;
   onChange: (newData: PlateData) => void;
-  onGenerate: () => void;
+  onGenerate: (isSpecial: boolean) => void;
   isGenerating: boolean;
 }
 
@@ -13,6 +13,12 @@ const Controls: React.FC<ControlsProps> = ({ data, onChange, onGenerate, isGener
   const handleRegionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^0-9]/g, '').slice(0, 3);
     onChange({ ...data, region: value });
+  };
+
+  const regionName = REGION_NAMES[data.region] || (data.region.length > 0 ? 'Неизвестный регион' : 'Введите регион');
+
+  const handleButtonClick = (e: React.MouseEvent) => {
+    onGenerate(e.shiftKey);
   };
 
   return (
@@ -37,7 +43,7 @@ const Controls: React.FC<ControlsProps> = ({ data, onChange, onGenerate, isGener
         {/* Region Input Section */}
         <div className="flex flex-col gap-3 group">
           <label className="text-white/30 text-[9px] font-black uppercase tracking-widest px-1 group-focus-within:text-yellow-400 transition-colors">
-            Код Региона (вручную)
+            Код Региона
           </label>
           <div className="relative">
             <input 
@@ -55,11 +61,17 @@ const Controls: React.FC<ControlsProps> = ({ data, onChange, onGenerate, isGener
                </svg>
             </div>
           </div>
+          {/* Region Name Display */}
+          <div className="h-4 flex items-center justify-center">
+            <span className={`text-[11px] font-bold uppercase transition-all duration-300 ${data.region.length > 0 ? 'text-yellow-400/80' : 'text-white/10'}`}>
+              {regionName}
+            </span>
+          </div>
         </div>
 
         {/* Action Button */}
         <button 
-          onClick={onGenerate}
+          onClick={handleButtonClick}
           disabled={isGenerating}
           className={`
             rp-font relative h-full min-h-[84px] rounded-xl font-black text-black uppercase tracking-tighter transition-all text-xl overflow-hidden
@@ -79,28 +91,9 @@ const Controls: React.FC<ControlsProps> = ({ data, onChange, onGenerate, isGener
             )}
           </div>
           {!isGenerating && (
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full hover:animate-[shimmer_2s_infinite] pointer-events-none"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite] pointer-events-none"></div>
           )}
         </button>
-      </div>
-
-      <div className="mt-12 w-full flex justify-center opacity-20">
-        <div className="flex gap-10 items-center">
-          <div className="flex flex-col items-center">
-            <span className="text-[8px] font-black uppercase">STATUS</span>
-            <span className="text-[10px] rp-font">ONLINE</span>
-          </div>
-          <div className="w-2 h-2 rounded-full bg-white/20"></div>
-          <div className="flex flex-col items-center">
-            <span className="text-[8px] font-black uppercase">TYPE</span>
-            <span className="text-[10px] rp-font">AUTO</span>
-          </div>
-          <div className="w-2 h-2 rounded-full bg-white/20"></div>
-          <div className="flex flex-col items-center">
-            <span className="text-[8px] font-black uppercase">DB</span>
-            <span className="text-[10px] rp-font">SYNCED</span>
-          </div>
-        </div>
       </div>
     </div>
   );
