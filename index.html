@@ -3,7 +3,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>МРЭО ГИБДД | ЦЕНТРАЛЬНЫЙ ТЕРМИНАЛ</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500;800;900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
@@ -16,13 +16,35 @@
             font-display: block;
         }
 
+        :root {
+            --majestic-yellow: #facc15;
+            --panel-bg: rgba(12, 12, 12, 0.9);
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
             background-color: #080808;
             color: white;
-            overflow: hidden;
-            height: 100vh;
+            min-height: 100vh;
+            /* Разрешаем скролл только если контент реально не влезает */
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        /* Кастомный скроллбар в стиле Majestic */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #080808;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(250, 204, 21, 0.2);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--majestic-yellow);
         }
 
         .rp-font {
@@ -34,28 +56,26 @@
             font-weight: normal !important;
         }
 
-        /* Majestic RP Style Glass */
         .rp-panel {
-            background: rgba(12, 12, 12, 0.9);
-            backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 40px 120px -20px rgba(0, 0, 0, 0.9);
+            background: var(--panel-bg);
+            backdrop-filter: blur(32px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8);
         }
 
         .majestic-yellow {
-            color: #facc15;
+            color: var(--majestic-yellow);
         }
 
         .majestic-bg {
-            background: #facc15;
+            background: var(--majestic-yellow);
         }
 
-        /* Background floating elements animation */
         @keyframes float {
             0% { transform: translateY(0) scale(1); opacity: 0; }
-            10% { opacity: 0.12; }
-            90% { opacity: 0.12; }
-            100% { transform: translateY(-400px) scale(1.1); opacity: 0; }
+            15% { opacity: 0.08; }
+            85% { opacity: 0.08; }
+            100% { transform: translateY(-30vh) scale(1.1); opacity: 0; }
         }
 
         .floating-char {
@@ -65,61 +85,47 @@
             color: white;
             pointer-events: none;
             z-index: 0;
-            animation: float 15s linear infinite;
+            animation: float 20s linear infinite;
+            will-change: transform, opacity;
         }
 
-        /* 
-           Smooth Digital Motion Blur:
-           Удалено увеличение (transform: scale).
-           Используется только мягкое размытие для имитации движения без "прыжков" и искажений размера.
-        */
         @keyframes char-smooth-roll {
-            0% { filter: blur(0px); }
-            50% { filter: blur(2px); }
-            100% { filter: blur(0px); }
+            0% { filter: blur(0px); opacity: 1; }
+            50% { filter: blur(3px); opacity: 0.8; }
+            100% { filter: blur(0px); opacity: 1; }
         }
 
         .animate-shuffling {
-            /* Плавная анимация без изменения размера */
-            animation: char-smooth-roll 0.4s ease-in-out infinite;
+            animation: char-smooth-roll 0.3s ease-in-out infinite;
             display: inline-block;
-            opacity: 1;
-            will-change: filter;
+            will-change: filter, opacity;
         }
 
-        /* Grid Background */
         .grid-bg {
-            background-size: 60px 60px;
+            background-size: 80px 80px;
             background-image: 
-                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
         }
 
         .scanline {
             width: 100%;
-            height: 150px;
+            height: 20vh;
             z-index: 5;
-            background: linear-gradient(0deg, rgba(250, 204, 21, 0) 0%, rgba(250, 204, 21, 0.02) 50%, rgba(250, 204, 21, 0) 100%);
-            position: absolute;
-            top: -150px;
-            animation: scan 8s linear infinite;
+            background: linear-gradient(0deg, transparent 0%, rgba(250, 204, 21, 0.01) 50%, transparent 100%);
+            position: fixed;
+            top: -20vh;
+            animation: scan 10s linear infinite;
             pointer-events: none;
         }
 
         @keyframes scan {
-            0% { top: -150px; }
-            100% { top: 100%; }
+            0% { transform: translateY(0); }
+            100% { transform: translateY(120vh); }
         }
 
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+        input {
+            caret-color: var(--majestic-yellow);
         }
     </style>
 <script type="importmap">

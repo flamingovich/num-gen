@@ -16,7 +16,6 @@ const App: React.FC = () => {
 
   const [shufflingStates, setShufflingStates] = useState<boolean[]>([false, false, false, false, false, false, false]);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [isFontCustom, setIsFontCustom] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [floatingElements, setFloatingElements] = useState<{id: number, char: string, left: string, delay: string}[]>([]);
   
@@ -24,11 +23,11 @@ const App: React.FC = () => {
   const finalDataRef = useRef<PlateData | null>(null);
 
   useEffect(() => {
-    const elements = Array.from({ length: 20 }).map((_, i) => ({
+    const elements = Array.from({ length: 12 }).map((_, i) => ({
       id: i,
       char: Math.random() > 0.5 ? VALID_CHARS[Math.floor(Math.random() * VALID_CHARS.length)] : Math.floor(Math.random() * 10).toString(),
-      left: `${Math.random() * 100}%`,
-      delay: `${Math.random() * 12}s`
+      left: `${5 + Math.random() * 90}%`,
+      delay: `${Math.random() * 15}s`
     }));
     setFloatingElements(elements);
   }, []);
@@ -62,7 +61,6 @@ const App: React.FC = () => {
     };
     finalDataRef.current = final;
 
-    // Индексы: 0-первая буква (RU), 1-4 цифры, 5-6 буквы
     const initialShuffling = Array(7).fill(true);
     shufflingRef.current = initialShuffling;
     setShufflingStates(initialShuffling);
@@ -78,7 +76,7 @@ const App: React.FC = () => {
           thirdLetter: shufflingRef.current[6] ? getRandomChar(prev.country) : finalDataRef.current!.thirdLetter,
         };
       });
-    }, 70);
+    }, 60);
 
     const lockSymbol = (index: number) => {
       if (index >= 7) {
@@ -87,7 +85,7 @@ const App: React.FC = () => {
         return;
       }
       
-      const delay = index === 0 ? 400 : 200;
+      const delay = index === 0 ? 350 : 180;
       setTimeout(() => {
         const nextShuffling = [...shufflingRef.current];
         nextShuffling[index] = false;
@@ -112,62 +110,96 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col bg-[#080808] relative overflow-hidden">
-      {floatingElements.map(el => (
-        <div key={el.id} className="floating-char text-6xl opacity-10" style={{ left: el.left, bottom: '-20%', animationDelay: el.delay }}>
-          {el.char}
-        </div>
-      ))}
+    <div className="min-h-screen w-full flex flex-col bg-[#080808] relative select-none">
+      {/* Background Layer */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        {floatingElements.map(el => (
+          <div key={el.id} className="floating-char text-7xl md:text-8xl opacity-0" style={{ left: el.left, bottom: '-10%', animationDelay: el.delay }}>
+            {el.char}
+          </div>
+        ))}
+      </div>
 
-      <header className="w-full px-12 py-8 flex items-center justify-between z-20 border-b border-white/5 bg-black/50 backdrop-blur-xl">
-        <div className="flex items-center gap-8">
-          <div className="majestic-bg px-5 py-3 rounded shadow-[0_0_25px_#facc1544]">
-             <span className="text-black font-black text-2xl rp-font">M</span>
+      {/* Header */}
+      <header className="w-full px-4 sm:px-10 py-5 md:py-8 flex items-center justify-between z-30 border-b border-white/5 bg-black/60 backdrop-blur-3xl sticky top-0">
+        <div className="flex items-center gap-4 md:gap-8 max-w-[1440px] mx-auto w-full">
+          <div className="flex items-center gap-4 flex-1">
+            <div className="majestic-bg px-4 py-3 rounded-lg shadow-[0_0_30px_rgba(250,204,21,0.3)]">
+               <span className="text-black font-black text-xl md:text-2xl rp-font">M</span>
+            </div>
+            <div>
+               <h1 className="rp-font text-base md:text-2xl font-black uppercase tracking-tight leading-none">РЕГИСТРАЦИЯ <span className="majestic-yellow">TC</span></h1>
+               <p className="text-white/20 text-[7px] md:text-[9px] uppercase font-black tracking-[0.4em] mt-1.5">ГОСУДАРСТВЕННЫЙ ПОРТАЛ</p>
+            </div>
           </div>
-          <div>
-             <h1 className="rp-font text-2xl font-extrabold uppercase tracking-tight">РЕГИСТРАЦИЯ <span className="majestic-yellow">TC</span></h1>
-             <p className="text-white/20 text-[9px] uppercase font-black tracking-[0.4em] mt-1">ГОСУДАРСТВЕННЫЙ ПОРТАЛ</p>
+          
+          <div className="flex items-center gap-4 md:gap-10 shrink-0">
+             <div className="flex items-center gap-3 md:gap-4">
+                <div className="text-right hidden sm:block">
+                  <span className="text-[8px] text-white/20 uppercase font-black tracking-widest">Сотрудник</span>
+                  <p className="text-[10px] md:text-xs font-bold uppercase rp-font text-white/80">A. Majestic</p>
+                </div>
+                <div className="w-9 h-9 md:w-11 md:h-11 rounded-full bg-white/5 border border-white/10 overflow-hidden p-0.5">
+                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Lucky" alt="avatar" className="w-full h-full rounded-full" />
+                </div>
+             </div>
           </div>
-        </div>
-        <div className="flex items-center gap-10">
-           <div className="flex items-center gap-4">
-              <div className="text-right"><span className="text-[9px] text-white/30 uppercase font-black">Сотрудник</span><p className="text-xs font-bold uppercase rp-font">A. Majestic</p></div>
-              <div className="w-10 h-10 rounded-full bg-white/10 border border-white/20 overflow-hidden ring-2 ring-white/5">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Lucky" alt="avatar" />
-              </div>
-           </div>
         </div>
       </header>
 
-      <main className="flex-grow flex flex-col items-center justify-center p-6 gap-16 z-10">
-        <div className="relative group">
-           <div className="absolute inset-0 bg-yellow-400/5 blur-[100px] opacity-40"></div>
-           <LicensePlate data={plateData} shufflingStates={shufflingStates} />
-        </div>
+      {/* Content Area */}
+      <main className="flex-grow flex flex-col items-center justify-center p-4 sm:p-10 md:p-16 z-10 relative">
+        <div className="w-full max-w-[1440px] flex flex-col items-center justify-center gap-12 md:gap-24">
+          
+          {/* Plate Stage */}
+          <div className="relative w-full flex items-center justify-center min-h-[300px] md:min-h-[400px]">
+             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[900px] h-[300px] bg-yellow-400/5 blur-[140px] opacity-40 pointer-events-none rounded-full"></div>
+             <LicensePlate data={plateData} shufflingStates={shufflingStates} />
+          </div>
 
-        <div className="w-full max-w-4xl">
-          <Controls 
-            data={plateData} 
-            onChange={setPlateData} 
-            onGenerate={handleGenerate}
-            onCountryChange={handleCountryChange}
-            isGenerating={isGenerating}
-          />
+          {/* Controls Stage */}
+          <div className="w-full flex justify-center px-2">
+            <Controls 
+              data={plateData} 
+              onChange={setPlateData} 
+              onGenerate={handleGenerate}
+              onCountryChange={handleCountryChange}
+              isGenerating={isGenerating}
+            />
+          </div>
         </div>
       </main>
 
-      <footer className="w-full px-12 py-6 bg-black/80 border-t border-white/5 flex items-center justify-end z-20">
-        <button onClick={() => fileInputRef.current?.click()} className="flex items-center gap-4 px-6 py-2.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
-          <div className={`w-2 h-2 rounded-full ${isFontCustom ? 'bg-yellow-400' : 'bg-white/20'}`}></div>
-          <span className="text-[10px] font-black uppercase tracking-widest text-white/50">{isFontCustom ? 'Шрифт активен' : 'Загрузить .OTF'}</span>
-          <input type="file" ref={fileInputRef} className="hidden" accept=".otf" onChange={async (e) => {
-             const file = e.target.files?.[0];
-             if (!file) return;
-             const arrayBuffer = await file.arrayBuffer();
-             const fontFace = new FontFace('roadnumberscyr_regular', arrayBuffer);
-             await fontFace.load(); document.fonts.add(fontFace); setIsFontCustom(true);
-          }} />
-        </button>
+      {/* Bottom Bar */}
+      <footer className="w-full px-4 sm:px-10 py-5 bg-black/60 backdrop-blur-2xl border-t border-white/5 flex items-center justify-center z-30 sticky bottom-0">
+        <div className="w-full max-w-[1440px] flex items-center justify-between">
+          <div className="flex items-center gap-2 md:gap-3 text-white/20 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em]">
+            <div className="w-1.5 h-1.5 rounded-full bg-yellow-400 animate-pulse shadow-[0_0_8px_#facc15]"></div>
+            Шрифт активен
+          </div>
+          
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => fileInputRef.current?.click()} 
+              className="group flex items-center gap-3 px-4 md:px-6 py-2 rounded-xl bg-white/[0.03] border border-white/5 hover:border-yellow-400/30 hover:bg-white/[0.06] transition-all active:scale-95"
+            >
+              <span className="text-[8px] md:text-[9px] font-black uppercase tracking-widest text-white/30 group-hover:text-yellow-400/80 transition-colors">Загрузить .OTF</span>
+              <input 
+                type="file" 
+                ref={fileInputRef} 
+                className="hidden" 
+                accept=".otf" 
+                onChange={async (e) => {
+                   const file = e.target.files?.[0];
+                   if (!file) return;
+                   const arrayBuffer = await file.arrayBuffer();
+                   const fontFace = new FontFace('roadnumberscyr_regular', arrayBuffer);
+                   await fontFace.load(); document.fonts.add(fontFace);
+                }} 
+              />
+            </button>
+          </div>
+        </div>
       </footer>
     </div>
   );
