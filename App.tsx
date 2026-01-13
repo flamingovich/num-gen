@@ -114,32 +114,32 @@ const App: React.FC = () => {
       {/* Background Layer */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         {floatingElements.map(el => (
-          <div key={el.id} className="floating-char text-7xl md:text-8xl opacity-0" style={{ left: el.left, bottom: '-10%', animationDelay: el.delay }}>
+          <div key={el.id} className="floating-char text-5xl md:text-6xl opacity-0" style={{ left: el.left, bottom: '-10%', animationDelay: el.delay }}>
             {el.char}
           </div>
         ))}
       </div>
 
-      {/* Header */}
-      <header className="w-full px-4 sm:px-10 py-5 md:py-8 flex items-center justify-between z-30 border-b border-white/5 bg-black/60 backdrop-blur-3xl sticky top-0">
-        <div className="flex items-center gap-4 md:gap-8 max-w-[1440px] mx-auto w-full">
-          <div className="flex items-center gap-4 flex-1">
-            <div className="majestic-bg px-4 py-3 rounded-lg shadow-[0_0_30px_rgba(250,204,21,0.3)]">
-               <span className="text-black font-black text-xl md:text-2xl rp-font">M</span>
+      {/* Header - Ultra Compact */}
+      <header className="w-full px-4 sm:px-6 py-2 md:py-3 flex items-center justify-between z-30 border-b border-white/5 bg-black/60 backdrop-blur-3xl sticky top-0">
+        <div className="flex items-center gap-4 md:gap-6 max-w-[1440px] mx-auto w-full">
+          <div className="flex items-center gap-3 flex-1">
+            <div className="majestic-bg px-2.5 py-1.5 rounded-md shadow-sm">
+               <span className="text-black font-black text-sm md:text-base rp-font">M</span>
             </div>
             <div>
-               <h1 className="rp-font text-base md:text-2xl font-black uppercase tracking-tight leading-none">РЕГИСТРАЦИЯ <span className="majestic-yellow">TC</span></h1>
-               <p className="text-white/20 text-[7px] md:text-[9px] uppercase font-black tracking-[0.4em] mt-1.5">ГОСУДАРСТВЕННЫЙ ПОРТАЛ</p>
+               <h1 className="rp-font text-xs md:text-lg font-black uppercase tracking-tight leading-none">РЕГИСТРАЦИЯ <span className="majestic-yellow">TC</span></h1>
+               <p className="text-white/10 text-[5px] md:text-[7px] uppercase font-black tracking-[0.4em] mt-0.5">ГОСУДАРСТВЕННЫЙ ПОРТАЛ</p>
             </div>
           </div>
           
-          <div className="flex items-center gap-4 md:gap-10 shrink-0">
-             <div className="flex items-center gap-3 md:gap-4">
+          <div className="flex items-center gap-4 md:gap-6 shrink-0">
+             <div className="flex items-center gap-2">
                 <div className="text-right hidden sm:block">
-                  <span className="text-[8px] text-white/20 uppercase font-black tracking-widest">Сотрудник</span>
-                  <p className="text-[10px] md:text-xs font-bold uppercase rp-font text-white/80">A. Majestic</p>
+                  <span className="text-[6px] text-white/10 uppercase font-black tracking-widest leading-none">Сотрудник</span>
+                  <p className="text-[8px] md:text-xs font-bold uppercase rp-font text-white/60">A. Majestic</p>
                 </div>
-                <div className="w-9 h-9 md:w-11 md:h-11 rounded-full bg-white/5 border border-white/10 overflow-hidden p-0.5">
+                <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white/5 border border-white/10 overflow-hidden p-0.5">
                   <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Lucky" alt="avatar" className="w-full h-full rounded-full" />
                 </div>
              </div>
@@ -147,18 +147,18 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      {/* Content Area */}
-      <main className="flex-grow flex flex-col items-center justify-center p-4 sm:p-10 md:p-16 z-10 relative">
-        <div className="w-full max-w-[1440px] flex flex-col items-center justify-center gap-12 md:gap-24">
+      {/* Content Area - Minimal gaps */}
+      <main className="flex-grow flex flex-col items-center justify-center p-3 sm:p-4 md:p-6 z-10 relative">
+        <div className="w-full max-w-[1440px] flex flex-col items-center justify-center gap-4 md:gap-8">
           
           {/* Plate Stage */}
-          <div className="relative w-full flex items-center justify-center min-h-[300px] md:min-h-[400px]">
-             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[900px] h-[300px] bg-yellow-400/5 blur-[140px] opacity-40 pointer-events-none rounded-full"></div>
+          <div className="relative w-full flex items-center justify-center min-h-[150px] md:min-h-[250px]">
+             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[600px] h-[150px] bg-yellow-400/5 blur-[80px] opacity-20 pointer-events-none rounded-full"></div>
              <LicensePlate data={plateData} shufflingStates={shufflingStates} />
           </div>
 
           {/* Controls Stage */}
-          <div className="w-full flex justify-center px-2">
+          <div className="w-full flex justify-center px-1">
             <Controls 
               data={plateData} 
               onChange={setPlateData} 
@@ -170,20 +170,20 @@ const App: React.FC = () => {
         </div>
       </main>
 
-      {/* Bottom Bar */}
-      <footer className="w-full px-4 sm:px-10 py-5 bg-black/60 backdrop-blur-2xl border-t border-white/5 flex items-center justify-center z-30 sticky bottom-0">
+      {/* Bottom Bar - Ultra Compact */}
+      <footer className="w-full px-4 sm:px-6 py-2 bg-black/60 backdrop-blur-2xl border-t border-white/5 flex items-center justify-center z-30 sticky bottom-0">
         <div className="w-full max-w-[1440px] flex items-center justify-between">
-          <div className="flex items-center gap-2 md:gap-3 text-white/20 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em]">
-            <div className="w-1.5 h-1.5 rounded-full bg-yellow-400 animate-pulse shadow-[0_0_8px_#facc15]"></div>
+          <div className="flex items-center gap-2 md:gap-3 text-white/10 text-[6px] md:text-[8px] font-black uppercase tracking-[0.2em]">
+            <div className="w-0.5 h-0.5 rounded-full bg-yellow-400 animate-pulse"></div>
             Шрифт активен
           </div>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <button 
               onClick={() => fileInputRef.current?.click()} 
-              className="group flex items-center gap-3 px-4 md:px-6 py-2 rounded-xl bg-white/[0.03] border border-white/5 hover:border-yellow-400/30 hover:bg-white/[0.06] transition-all active:scale-95"
+              className="group flex items-center gap-1.5 px-2 md:px-3 py-1 rounded-md bg-white/[0.01] border border-white/5 hover:border-yellow-400/20 hover:bg-white/[0.03] transition-all active:scale-95"
             >
-              <span className="text-[8px] md:text-[9px] font-black uppercase tracking-widest text-white/30 group-hover:text-yellow-400/80 transition-colors">Загрузить .OTF</span>
+              <span className="text-[6px] md:text-[7px] font-black uppercase tracking-widest text-white/20 group-hover:text-yellow-400/60 transition-colors">Загрузить .OTF</span>
               <input 
                 type="file" 
                 ref={fileInputRef} 

@@ -36,30 +36,30 @@ const Controls: React.FC<ControlsProps> = ({ data, onChange, onGenerate, onCount
   const regionName = getRegionName();
 
   return (
-    <div className="rp-panel w-full max-w-[1000px] p-4 sm:p-6 md:p-10 rounded-[32px] md:rounded-[48px] border-t border-white/10 flex flex-col items-center gap-6 md:gap-10 transition-all">
+    <div className="rp-panel w-full max-w-[720px] p-3 sm:p-4 md:p-6 rounded-[20px] md:rounded-[28px] border-t border-white/10 flex flex-col items-center gap-3 md:gap-5 transition-all">
       
-      {/* Country Switcher */}
-      <div className="flex bg-black/40 p-1 rounded-2xl border border-white/5 w-fit">
+      {/* Country Switcher - Mini */}
+      <div className="flex bg-black/40 p-0.5 rounded-lg border border-white/5 w-fit">
          <button 
            onClick={() => !isGenerating && onCountryChange('RU')}
-           className={`px-6 md:px-12 py-3 rounded-xl rp-font text-[10px] md:text-xs font-black transition-all duration-300 ${isRU ? 'majestic-bg text-black shadow-lg shadow-yellow-400/30 scale-105' : 'text-white/30 hover:text-white/60'}`}
+           className={`px-4 md:px-6 py-1.5 md:py-2 rounded-md rp-font text-[8px] md:text-[9px] font-black transition-all duration-300 ${isRU ? 'majestic-bg text-black shadow-md shadow-yellow-400/20' : 'text-white/20 hover:text-white/40'}`}
          >
            РОССИЯ
          </button>
          <button 
            onClick={() => !isGenerating && onCountryChange('BY')}
-           className={`px-6 md:px-12 py-3 rounded-xl rp-font text-[10px] md:text-xs font-black transition-all duration-300 ${!isRU ? 'majestic-bg text-black shadow-lg shadow-yellow-400/30 scale-105' : 'text-white/30 hover:text-white/60'}`}
+           className={`px-4 md:px-6 py-1.5 md:py-2 rounded-md rp-font text-[8px] md:text-[9px] font-black transition-all duration-300 ${!isRU ? 'majestic-bg text-black shadow-md shadow-yellow-400/20' : 'text-white/20 hover:text-white/40'}`}
          >
            БЕЛАРУСЬ
          </button>
       </div>
 
-      {/* Inputs Grid */}
-      <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-stretch md:items-end">
+      {/* Inputs Grid - Compact */}
+      <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-5 items-stretch md:items-end">
         
         {/* Region Input Column */}
-        <div className="md:col-span-5 flex flex-col gap-3 group">
-          <label className="text-white/20 text-[9px] font-black uppercase tracking-[0.2em] px-1">Код Региона</label>
+        <div className="md:col-span-4 flex flex-col gap-1.5 group">
+          <label className="text-white/10 text-[7px] font-black uppercase tracking-[0.2em] px-1">Код Региона</label>
           <div className="relative">
             <input 
               type="text" 
@@ -67,28 +67,28 @@ const Controls: React.FC<ControlsProps> = ({ data, onChange, onGenerate, onCount
               onChange={handleRegionChange}
               disabled={isGenerating}
               placeholder={isRU ? "777" : "7"}
-              className="w-full bg-white/[0.02] border border-white/10 text-white p-4 md:p-6 rounded-2xl text-2xl md:text-4xl font-black rp-font outline-none focus:border-yellow-400/50 focus:bg-white/[0.04] text-center transition-all placeholder:text-white/5"
+              className="w-full bg-white/[0.01] border border-white/5 text-white p-2.5 md:p-3.5 rounded-lg text-lg md:text-2xl font-black rp-font outline-none focus:border-yellow-400/30 text-center transition-all placeholder:text-white/5"
               maxLength={isRU ? 3 : 1}
             />
           </div>
-          <div className="h-5 flex items-center justify-center">
-            <span className={`text-[9px] md:text-[10px] font-bold uppercase tracking-wider transition-all duration-500 ${data.region.length > 0 && regionName !== 'Неизвестный регион' && regionName !== 'Введите регион' ? 'text-yellow-400 opacity-100' : 'text-white/10 opacity-50'}`}>
+          <div className="h-3.5 flex items-center justify-center">
+            <span className={`text-[7px] md:text-[8px] font-bold uppercase tracking-wider transition-all duration-500 ${data.region.length > 0 && regionName !== 'Неизвестный регион' && regionName !== 'Введите регион' ? 'text-yellow-400 opacity-80' : 'text-white/5 opacity-30'}`}>
               {regionName}
             </span>
           </div>
         </div>
 
         {/* Generate Button Column */}
-        <div className="md:col-span-7 flex flex-col gap-3">
-          <div className="hidden md:block h-[12px]"></div> {/* Spacer for alignment */}
+        <div className="md:col-span-8 flex flex-col gap-1.5">
+          <div className="hidden md:block h-[8px]"></div>
           <button 
             onClick={(e) => onGenerate(e.shiftKey)}
             disabled={isGenerating}
-            className={`rp-font relative w-full h-[64px] md:h-[92px] rounded-2xl font-black text-black uppercase text-sm md:text-xl transition-all shadow-xl ${isGenerating ? 'bg-white/5 text-white/10 cursor-not-allowed' : 'majestic-bg hover:brightness-110 hover:scale-[1.02] active:scale-[0.98] shadow-yellow-400/10'}`}
+            className={`rp-font relative w-full h-[48px] md:h-[60px] rounded-lg font-black text-black uppercase text-[10px] md:text-sm transition-all shadow-lg ${isGenerating ? 'bg-white/5 text-white/10 cursor-not-allowed' : 'majestic-bg hover:brightness-105 active:scale-[0.98]'}`}
           >
-            {isGenerating ? 'ПОДОЖДИТЕ...' : 'ПОЛУЧИТЬ НОМЕР'}
+            {isGenerating ? '...' : 'ПОЛУЧИТЬ НОМЕР'}
           </button>
-          <div className="h-5"></div> {/* Bottom spacer */}
+          <div className="h-3.5"></div>
         </div>
       </div>
     </div>
