@@ -1,98 +1,92 @@
 
 import React from 'react';
-import { PlateData, REGION_NAMES } from '../types.ts';
+import { PlateData, REGION_NAMES_RU, REGION_NAMES_BY, Country } from '../types.ts';
 
 interface ControlsProps {
   data: PlateData;
   onChange: (newData: PlateData) => void;
   onGenerate: (isSpecial: boolean) => void;
+  onCountryChange: (country: Country) => void;
   isGenerating: boolean;
 }
 
-const Controls: React.FC<ControlsProps> = ({ data, onChange, onGenerate, isGenerating }) => {
+const Controls: React.FC<ControlsProps> = ({ data, onChange, onGenerate, onCountryChange, isGenerating }) => {
+  const isRU = data.country === 'RU';
+  
   const handleRegionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/[^0-9]/g, '').slice(0, 3);
-    onChange({ ...data, region: value });
+    const value = e.target.value.replace(/[^0-9]/g, '');
+    const limit = isRU ? 3 : 1;
+    onChange({ ...data, region: value.slice(0, limit) });
   };
 
-  const regionName = REGION_NAMES[data.region] || (data.region.length > 0 ? 'Неизвестный регион' : 'Введите регион');
-
-  const handleButtonClick = (e: React.MouseEvent) => {
-    onGenerate(e.shiftKey);
+  // Улучшенная логика поиска региона
+  const getRegionName = () => {
+    if (data.region.length === 0) return 'Введите регион';
+    
+    if (isRU) {
+      // Прямой поиск (например, '777')
+      if (REGION_NAMES_RU[data.region]) return REGION_NAMES_RU[data.region];
+      
+      // Поиск с ведущим нулем (для кодов 1-9, если введено '1' -> '01')
+      if (data.region.length === 1) {
+        const padded = data.region.padStart(2, '0');
+        if (REGION_NAMES_RU[padded]) return REGION_NAMES_RU[padded];
+      }
+      
+      return 'Неизвестный регион';
+    } else {
+      return REGION_NAMES_BY[data.region] || 'Неизвестный регион';
+    }
   };
+
+  const regionName = getRegionName();
 
   return (
-    <div className="rp-panel p-10 rounded-2xl border-t-2 border-white/5 w-full relative overflow-hidden flex flex-col items-center">
-      {/* Glow Effect */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-1 bg-yellow-400 shadow-[0_0_30px_#facc15]"></div>
-
-      <div className="w-full flex flex-col items-center text-center mb-10">
-        <h2 className="rp-font text-3xl font-black uppercase tracking-tight mb-3">
-          РЕГИСТРАЦИЯ <span className="majestic-yellow">ТРАНСПОРТА</span>
-        </h2>
-        <div className="flex items-center gap-4">
-          <div className="h-[1px] w-12 bg-white/10"></div>
-          <p className="text-white/40 text-[10px] font-bold uppercase tracking-[0.4em]">
-            ГЕНЕРАЦИЯ ГОСУДАРСТВЕННОГО НОМЕРА
-          </p>
-          <div className="h-[1px] w-12 bg-white/10"></div>
-        </div>
+    <div className="rp-panel p-8 rounded-3xl border-t border-white/10 w-full flex flex-col items-center gap-10">
+      
+      {/* Country Switcher */}
+      <div className="flex bg-white/5 p-1.5 rounded-2xl border border-white/5">
+         <button 
+           onClick={() => !isGenerating && onCountryChange('RU')}
+           className={`px-10 py-3 rounded-xl rp-font text-xs font-black transition-all ${isRU ? 'majestic-bg text-black shadow-lg shadow-yellow-400/20' : 'text-white/40 hover:text-white'}`}
+         >
+           РОССИЯ
+         </button>
+         <button 
+           onClick={() => !isGenerating && onCountryChange('BY')}
+           className={`px-10 py-3 rounded-xl rp-font text-xs font-black transition-all ${!isRU ? 'majestic-bg text-black shadow-lg shadow-yellow-400/20' : 'text-white/40 hover:text-white'}`}
+         >
+           БЕЛАРУСЬ
+         </button>
       </div>
 
-      <div className="w-full max-w-2xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-        {/* Region Input Section */}
+      <div className="w-full max-w-2xl grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
         <div className="flex flex-col gap-3 group">
-          <label className="text-white/30 text-[9px] font-black uppercase tracking-widest px-1 group-focus-within:text-yellow-400 transition-colors">
-            Код Региона
-          </label>
+          <label className="text-white/30 text-[9px] font-black uppercase tracking-widest px-1">Код Региона</label>
           <div className="relative">
             <input 
               type="text" 
               value={data.region}
               onChange={handleRegionChange}
               disabled={isGenerating}
-              placeholder="777"
-              className="w-full bg-white/[0.03] border border-white/10 text-white p-5 rounded-xl text-3xl font-black rp-font outline-none focus:border-yellow-400 focus:bg-white/[0.05] transition-all text-center tracking-widest"
-              maxLength={3}
+              placeholder={isRU ? "777" : "7"}
+              className="w-full bg-white/[0.03] border border-white/10 text-white p-5 rounded-2xl text-3xl font-black rp-font outline-none focus:border-yellow-400 text-center transition-all"
+              maxLength={isRU ? 3 : 1}
             />
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-20 group-focus-within:opacity-100 transition-opacity">
-               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-               </svg>
-            </div>
           </div>
-          {/* Region Name Display */}
-          <div className="h-4 flex items-center justify-center">
-            <span className={`text-[11px] font-bold uppercase transition-all duration-300 ${data.region.length > 0 ? 'text-yellow-400/80' : 'text-white/10'}`}>
+          <div className="h-4 text-center">
+            <span className={`text-[10px] font-bold uppercase transition-all ${data.region.length > 0 && regionName !== 'Неизвестный регион' && regionName !== 'Введите регион' ? 'text-yellow-400' : 'text-white/10'}`}>
               {regionName}
             </span>
           </div>
         </div>
 
-        {/* Action Button */}
         <button 
-          onClick={handleButtonClick}
+          onClick={(e) => onGenerate(e.shiftKey)}
           disabled={isGenerating}
-          className={`
-            rp-font relative h-full min-h-[84px] rounded-xl font-black text-black uppercase tracking-tighter transition-all text-xl overflow-hidden
-            ${isGenerating 
-              ? 'bg-zinc-800 text-white/20 cursor-not-allowed border border-white/5' 
-              : 'majestic-bg hover:brightness-110 hover:shadow-[0_0_50px_rgba(250,204,21,0.4)] active:scale-95'}
-          `}
+          className={`rp-font relative h-[78px] rounded-2xl font-black text-black uppercase text-xl transition-all ${isGenerating ? 'bg-white/5 text-white/20' : 'majestic-bg hover:brightness-110 active:scale-95'}`}
         >
-          <div className="relative z-10 flex items-center justify-center gap-4">
-            {isGenerating ? (
-              <>
-                <div className="w-5 h-5 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
-                <span>В ОБРАБОТКЕ...</span>
-              </>
-            ) : (
-              <span>ПОЛУЧИТЬ НОМЕР</span>
-            )}
-          </div>
-          {!isGenerating && (
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite] pointer-events-none"></div>
-          )}
+          {isGenerating ? 'ГЕНЕРАЦИЯ...' : 'ПОЛУЧИТЬ НОМЕР'}
         </button>
       </div>
     </div>
