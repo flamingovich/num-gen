@@ -1,106 +1,106 @@
 
 import React from 'react';
-import { PlateData, VALID_CHARS } from '../types.ts';
+import { PlateData } from '../types.ts';
 
 interface ControlsProps {
   data: PlateData;
   onChange: (newData: PlateData) => void;
+  onGenerate: () => void;
+  isGenerating: boolean;
 }
 
-const Controls: React.FC<ControlsProps> = ({ data, onChange }) => {
-  const updateField = (field: keyof PlateData, value: string) => {
-    let sanitized = value.toUpperCase();
-    
-    // Validate based on field type
-    if (field === 'numbers' || field === 'region') {
-      sanitized = sanitized.replace(/[^0-9]/g, '');
-    } else {
-      sanitized = sanitized.replace(/[^АВЕКМНОРСТУХ]/g, '');
-    }
-
-    // Limit lengths
-    if (field === 'firstLetter' || field === 'secondLetter' || field === 'thirdLetter') sanitized = sanitized.slice(0, 1);
-    if (field === 'numbers') sanitized = sanitized.slice(0, 3);
-    if (field === 'region') sanitized = sanitized.slice(0, 3);
-
-    onChange({ ...data, [field]: sanitized });
+const Controls: React.FC<ControlsProps> = ({ data, onChange, onGenerate, isGenerating }) => {
+  const handleRegionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/[^0-9]/g, '').slice(0, 3);
+    onChange({ ...data, region: value });
   };
 
   return (
-    <div className="bg-slate-800/50 backdrop-blur-md p-6 rounded-2xl border border-slate-700 w-full max-w-lg">
-      <h2 className="text-slate-100 text-lg font-bold mb-4 flex items-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-        </svg>
-        Edit License Plate
-      </h2>
+    <div className="rp-panel p-10 rounded-2xl border-t-2 border-white/5 w-full relative overflow-hidden flex flex-col items-center">
+      {/* Glow Effect */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-1 bg-yellow-400 shadow-[0_0_30px_#facc15]"></div>
 
-      <div className="grid grid-cols-5 gap-3">
-        <div className="flex flex-col gap-1">
-          <label className="text-slate-400 text-xs font-medium uppercase px-1">Ser.</label>
-          <input 
-            type="text" 
-            value={data.firstLetter}
-            onChange={(e) => updateField('firstLetter', e.target.value)}
-            className="bg-slate-900 text-white border border-slate-600 rounded-lg p-2 text-center text-xl font-bold focus:border-blue-500 outline-none transition-all"
-            maxLength={1}
-            placeholder="A"
-          />
-        </div>
-        <div className="flex flex-col gap-1 col-span-2">
-          <label className="text-slate-400 text-xs font-medium uppercase px-1">Numbers</label>
-          <input 
-            type="text" 
-            value={data.numbers}
-            onChange={(e) => updateField('numbers', e.target.value)}
-            className="bg-slate-900 text-white border border-slate-600 rounded-lg p-2 text-center text-xl font-bold focus:border-blue-500 outline-none transition-all"
-            maxLength={3}
-            placeholder="000"
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <label className="text-slate-400 text-xs font-medium uppercase px-1">Ser.</label>
-          <input 
-            type="text" 
-            value={data.secondLetter}
-            onChange={(e) => updateField('secondLetter', e.target.value)}
-            className="bg-slate-900 text-white border border-slate-600 rounded-lg p-2 text-center text-xl font-bold focus:border-blue-500 outline-none transition-all"
-            maxLength={1}
-            placeholder="A"
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <label className="text-slate-400 text-xs font-medium uppercase px-1">Ser.</label>
-          <input 
-            type="text" 
-            value={data.thirdLetter}
-            onChange={(e) => updateField('thirdLetter', e.target.value)}
-            className="bg-slate-900 text-white border border-slate-600 rounded-lg p-2 text-center text-xl font-bold focus:border-blue-500 outline-none transition-all"
-            maxLength={1}
-            placeholder="A"
-          />
+      <div className="w-full flex flex-col items-center text-center mb-10">
+        <h2 className="rp-font text-3xl font-black uppercase tracking-tight mb-3">
+          РЕГИСТРАЦИЯ <span className="majestic-yellow">ТРАНСПОРТА</span>
+        </h2>
+        <div className="flex items-center gap-4">
+          <div className="h-[1px] w-12 bg-white/10"></div>
+          <p className="text-white/40 text-[10px] font-bold uppercase tracking-[0.4em]">
+            ГЕНЕРАЦИЯ ГОСУДАРСТВЕННОГО НОМЕРА
+          </p>
+          <div className="h-[1px] w-12 bg-white/10"></div>
         </div>
       </div>
 
-      <div className="mt-4 flex flex-col gap-1">
-        <label className="text-slate-400 text-xs font-medium uppercase px-1">Region Code</label>
-        <input 
-          type="text" 
-          value={data.region}
-          onChange={(e) => updateField('region', e.target.value)}
-          className="bg-slate-900 text-white border border-slate-600 rounded-lg p-2 text-center text-2xl font-black tracking-widest focus:border-blue-500 outline-none transition-all"
-          maxLength={3}
-          placeholder="77"
-        />
-      </div>
-
-      <div className="mt-6 flex flex-wrap gap-2">
-        <span className="text-slate-500 text-[10px] uppercase w-full mb-1">Allowed Letters:</span>
-        {VALID_CHARS.map(char => (
-          <div key={char} className="text-slate-400 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs font-mono">
-            {char}
+      <div className="w-full max-w-2xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        {/* Region Input Section */}
+        <div className="flex flex-col gap-3 group">
+          <label className="text-white/30 text-[9px] font-black uppercase tracking-widest px-1 group-focus-within:text-yellow-400 transition-colors">
+            Код Региона (вручную)
+          </label>
+          <div className="relative">
+            <input 
+              type="text" 
+              value={data.region}
+              onChange={handleRegionChange}
+              disabled={isGenerating}
+              placeholder="777"
+              className="w-full bg-white/[0.03] border border-white/10 text-white p-5 rounded-xl text-3xl font-black rp-font outline-none focus:border-yellow-400 focus:bg-white/[0.05] transition-all text-center tracking-widest"
+              maxLength={3}
+            />
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-20 group-focus-within:opacity-100 transition-opacity">
+               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+               </svg>
+            </div>
           </div>
-        ))}
+        </div>
+
+        {/* Action Button */}
+        <button 
+          onClick={onGenerate}
+          disabled={isGenerating}
+          className={`
+            rp-font relative h-full min-h-[84px] rounded-xl font-black text-black uppercase tracking-tighter transition-all text-xl overflow-hidden
+            ${isGenerating 
+              ? 'bg-zinc-800 text-white/20 cursor-not-allowed border border-white/5' 
+              : 'majestic-bg hover:brightness-110 hover:shadow-[0_0_50px_rgba(250,204,21,0.4)] active:scale-95'}
+          `}
+        >
+          <div className="relative z-10 flex items-center justify-center gap-4">
+            {isGenerating ? (
+              <>
+                <div className="w-5 h-5 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
+                <span>В ОБРАБОТКЕ...</span>
+              </>
+            ) : (
+              <span>ПОЛУЧИТЬ НОМЕР</span>
+            )}
+          </div>
+          {!isGenerating && (
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full hover:animate-[shimmer_2s_infinite] pointer-events-none"></div>
+          )}
+        </button>
+      </div>
+
+      <div className="mt-12 w-full flex justify-center opacity-20">
+        <div className="flex gap-10 items-center">
+          <div className="flex flex-col items-center">
+            <span className="text-[8px] font-black uppercase">STATUS</span>
+            <span className="text-[10px] rp-font">ONLINE</span>
+          </div>
+          <div className="w-2 h-2 rounded-full bg-white/20"></div>
+          <div className="flex flex-col items-center">
+            <span className="text-[8px] font-black uppercase">TYPE</span>
+            <span className="text-[10px] rp-font">AUTO</span>
+          </div>
+          <div className="w-2 h-2 rounded-full bg-white/20"></div>
+          <div className="flex flex-col items-center">
+            <span className="text-[8px] font-black uppercase">DB</span>
+            <span className="text-[10px] rp-font">SYNCED</span>
+          </div>
+        </div>
       </div>
     </div>
   );
