@@ -8,10 +8,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Подключаем шрифт напрямую из вашей папки */
         @font-face {
             font-family: "roadnumberscyr_regular";
-            src: url("fonts/roadnumberscyr_regular.otf") format("opentype");
+            /* Исправленный путь: ./ вместо . */
+            src: url("./fonts/roadnumberscyr_regular.otf") format("opentype");
             font-weight: normal;
             font-style: normal;
             font-display: block;
@@ -23,7 +23,6 @@
             background-color: #020617;
         }
 
-        /* Принудительное применение шрифта */
         .gost-font {
             font-family: "roadnumberscyr_regular", sans-serif !important;
             font-weight: normal !important;
@@ -31,7 +30,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Эффект объемного тиснения (штамповки) */
         .embossed-text {
             text-shadow: 
                 0.5px 0.5px 0px rgba(255,255,255,0.4), 
@@ -51,5 +49,7 @@
 </head>
 <body>
     <div id="root"></div>
+    <!-- Добавляем запуск приложения -->
+    <script type="module" src="index.tsx"></script>
 </body>
 </html>

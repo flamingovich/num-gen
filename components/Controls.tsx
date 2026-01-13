@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { PlateData, VALID_CHARS } from '../types';
+import { PlateData, VALID_CHARS } from '../types.ts';
 
 interface ControlsProps {
   data: PlateData;

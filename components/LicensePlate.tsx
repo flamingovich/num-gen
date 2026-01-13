@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { PlateData } from '../types';
+import { PlateData } from '../types.ts';
 
 interface LicensePlateProps {
   data: PlateData;

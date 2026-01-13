@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
-import LicensePlate from './components/LicensePlate';
-import Controls from './components/Controls';
-import { PlateData } from './types';
+import LicensePlate from './components/LicensePlate.tsx';
+import Controls from './components/Controls.tsx';
+import { PlateData } from './types.ts';
 
 const App: React.FC = () => {
   const [plateData, setPlateData] = useState<PlateData>({
