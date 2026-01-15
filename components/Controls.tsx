@@ -10,12 +10,41 @@ interface ControlsProps {
   isGenerating: boolean;
 }
 
+// Карта замены латиницы на кириллицу (омоглифы)
+const LATIN_TO_CYRILLIC: Record<string, string> = {
+  'A': 'А',
+  'B': 'В',
+  'E': 'Е',
+  'K': 'К',
+  'M': 'М',
+  'H': 'Н',
+  'O': 'О',
+  'P': 'Р',
+  'C': 'С',
+  'T': 'Т',
+  'Y': 'У',
+  'X': 'Х'
+};
+
 const Controls: React.FC<ControlsProps> = ({ data, onChange, onGenerate, onCountryChange, isGenerating }) => {
   const isRU = data.country === 'RU';
+  const isBY = data.country === 'BY';
   
   const handleRegionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/[^0-9]/g, '');
-    const limit = isRU ? 3 : 1;
+    let rawValue = e.target.value.toUpperCase();
+    
+    // Автоматическая замена похожих латинских букв на кириллицу
+    let value = '';
+    for (let char of rawValue) {
+      value += LATIN_TO_CYRILLIC[char] || char;
+    }
+
+    // Оставляем только цифры для RU/BY регионов
+    value = value.replace(/[^0-9]/g, '');
+    
+    let limit = 2;
+    if (isRU) limit = 3;
+    if (isBY) limit = 1;
     onChange({ ...data, region: value.slice(0, limit) });
   };
 
@@ -36,28 +65,25 @@ const Controls: React.FC<ControlsProps> = ({ data, onChange, onGenerate, onCount
   const regionName = getRegionName();
 
   return (
-    <div className="rp-panel w-full max-w-[720px] p-3 sm:p-4 md:p-6 rounded-[20px] md:rounded-[28px] border-t border-white/10 flex flex-col items-center gap-3 md:gap-5 transition-all">
+    <div className="rp-panel w-full max-w-[850px] p-3 sm:p-4 md:p-6 rounded-[20px] md:rounded-[28px] border-t border-white/10 flex flex-col items-center gap-3 md:gap-5 transition-all">
       
-      {/* Country Switcher - Mini */}
-      <div className="flex bg-black/40 p-0.5 rounded-lg border border-white/5 w-fit">
+      {/* Country Switcher */}
+      <div className="flex bg-black/40 p-0.5 rounded-lg border border-white/5 w-fit overflow-x-auto max-w-full no-scrollbar">
          <button 
            onClick={() => !isGenerating && onCountryChange('RU')}
-           className={`px-4 md:px-6 py-1.5 md:py-2 rounded-md rp-font text-[8px] md:text-[9px] font-black transition-all duration-300 ${isRU ? 'majestic-bg text-black shadow-md shadow-yellow-400/20' : 'text-white/20 hover:text-white/40'}`}
+           className={`px-4 md:px-6 py-1.5 md:py-2 rounded-md rp-font text-[8px] md:text-[9px] font-black transition-all duration-300 whitespace-nowrap ${isRU ? 'majestic-bg text-black shadow-md shadow-yellow-400/20' : 'text-white/20 hover:text-white/40'}`}
          >
            РОССИЯ
          </button>
          <button 
            onClick={() => !isGenerating && onCountryChange('BY')}
-           className={`px-4 md:px-6 py-1.5 md:py-2 rounded-md rp-font text-[8px] md:text-[9px] font-black transition-all duration-300 ${!isRU ? 'majestic-bg text-black shadow-md shadow-yellow-400/20' : 'text-white/20 hover:text-white/40'}`}
+           className={`px-4 md:px-6 py-1.5 md:py-2 rounded-md rp-font text-[8px] md:text-[9px] font-black transition-all duration-300 whitespace-nowrap ${isBY ? 'majestic-bg text-black shadow-md shadow-yellow-400/20' : 'text-white/20 hover:text-white/40'}`}
          >
            БЕЛАРУСЬ
          </button>
       </div>
 
-      {/* Inputs Grid - Compact */}
       <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-5 items-stretch md:items-end">
-        
-        {/* Region Input Column */}
         <div className="md:col-span-4 flex flex-col gap-1.5 group">
           <label className="text-white/10 text-[7px] font-black uppercase tracking-[0.2em] px-1">Код Региона</label>
           <div className="relative">
@@ -78,7 +104,6 @@ const Controls: React.FC<ControlsProps> = ({ data, onChange, onGenerate, onCount
           </div>
         </div>
 
-        {/* Generate Button Column */}
         <div className="md:col-span-8 flex flex-col gap-1.5">
           <div className="hidden md:block h-[8px]"></div>
           <button 

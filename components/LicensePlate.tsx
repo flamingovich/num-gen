@@ -9,6 +9,7 @@ interface LicensePlateProps {
 
 const LicensePlate: React.FC<LicensePlateProps> = ({ data, shufflingStates }) => {
   const isRU = data.country === 'RU';
+  const isBY = data.country === 'BY';
   const digits = data.numbers.split('');
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
@@ -48,24 +49,21 @@ const LicensePlate: React.FC<LicensePlateProps> = ({ data, shufflingStates }) =>
       className="relative flex items-center justify-center transition-all duration-700 ease-out will-change-transform"
       style={{ transform: `scale(${scale})`, transformOrigin: 'center center' }}
     >
-      {/* Внешняя рамка номера */}
-      <div className="p-3 bg-[#111111] rounded-[20px] border border-white/5 shadow-[0_40px_100px_rgba(0,0,0,0.95)]">
+      <div className="p-3 bg-[#0d0d0d] rounded-[24px] border border-white/5 shadow-[0_50px_120px_rgba(0,0,0,0.95)]">
         <div 
-          className="relative plate-gradient border-[5px] border-black/95 rounded-[10px] flex items-center shadow-2xl overflow-hidden select-none"
+          className="relative plate-gradient border-[5px] border-black/95 rounded-[12px] flex items-center shadow-2xl overflow-hidden select-none"
           style={{ width: '820px', height: '180px' }}
         >
-          {/* Слой с фотореалистичными бликами перемещен под символы (z-0) */}
-          <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-40 z-0" />
-          <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/5 via-transparent to-black/10 opacity-30 z-0" />
+          <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-30 z-0" />
+          <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/5 via-transparent to-black/10 opacity-20 z-0" />
 
-          {isRU ? (
+          {isRU && (
             <div className="relative z-10 w-full h-full flex items-center">
               <div className="flex-grow flex items-center justify-center h-full px-6">
                 <div className="flex items-baseline translate-y-[-38px]">
                   <span className={`text-black text-[160px] leading-none gost-font mr-2 ${shufflingStates[0] ? 'animate-shuffling' : ''}`}>
                     {data.firstLetter}
                   </span>
-                  
                   <div className="flex items-baseline">
                     {digits.map((digit, idx) => (
                       <span key={idx} className={`text-black text-[205px] leading-none gost-font ${shufflingStates[idx + 1] ? 'animate-shuffling' : ''}`}>
@@ -73,7 +71,6 @@ const LicensePlate: React.FC<LicensePlateProps> = ({ data, shufflingStates }) =>
                       </span>
                     ))}
                   </div>
-                  
                   <div className="flex items-baseline ml-2">
                     <span className={`text-black text-[160px] leading-none gost-font mr-1 ${shufflingStates[5] ? 'animate-shuffling' : ''}`}>
                       {data.secondLetter}
@@ -84,9 +81,7 @@ const LicensePlate: React.FC<LicensePlateProps> = ({ data, shufflingStates }) =>
                   </div>
                 </div>
               </div>
-              
               <div className="w-[4px] bg-black/95 h-full shrink-0" />
-              
               <div className="w-[170px] flex flex-col items-center justify-center h-full bg-transparent">
                 <div className="flex-grow flex items-center justify-center pt-2 translate-y-[-10px]">
                   <span className="text-black text-[105px] leading-none gost-font tracking-tighter">{data.region}</span>
@@ -101,7 +96,9 @@ const LicensePlate: React.FC<LicensePlateProps> = ({ data, shufflingStates }) =>
                 </div>
               </div>
             </div>
-          ) : (
+          )}
+
+          {isBY && (
             <div className="relative z-10 w-full h-full flex items-center pl-8 pr-4">
               <div className="flex flex-col items-center justify-center h-full w-[110px] border-r border-black/15 mr-4 py-4 shrink-0">
                  <div className="relative w-24 h-14 rounded-sm overflow-hidden border border-black/10 mb-1 shadow-sm">
@@ -131,9 +128,8 @@ const LicensePlate: React.FC<LicensePlateProps> = ({ data, shufflingStates }) =>
             </div>
           )}
           
-          {/* Болты крепления поверх всего */}
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-gradient-to-br from-zinc-200 to-zinc-500 border border-black/30 shadow-sm opacity-50 z-20" />
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-gradient-to-br from-zinc-200 to-zinc-500 border border-black/30 shadow-sm opacity-50 z-20" />
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-gradient-to-br from-zinc-200 to-zinc-500 border border-black/30 shadow-sm opacity-40 z-20" />
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-gradient-to-br from-zinc-200 to-zinc-500 border border-black/30 shadow-sm opacity-40 z-20" />
         </div>
       </div>
     </div>
