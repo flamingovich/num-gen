@@ -51,31 +51,32 @@ const LicensePlate: React.FC<LicensePlateProps> = ({ data, shufflingStates }) =>
     >
       <div className="p-3 bg-[#0d0d0d] rounded-[24px] border border-white/5 shadow-[0_50px_120px_rgba(0,0,0,0.95)]">
         <div 
-          className="relative plate-gradient border-[5px] border-black/95 rounded-[12px] flex items-center shadow-2xl overflow-hidden select-none"
+          className="relative plate-gradient border-[5px] border-black/95 rounded-[12px] flex items-center shadow-2xl select-none"
           style={{ width: '820px', height: '180px' }}
         >
-          <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-30 z-0" />
-          <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/5 via-transparent to-black/10 opacity-20 z-0" />
+          <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-30 z-0 rounded-[8px]" />
+          <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/5 via-transparent to-black/10 opacity-20 z-0 rounded-[8px]" />
 
           {isRU && (
             <div className="relative z-10 w-full h-full flex items-center">
               <div className="flex-grow flex items-center justify-center h-full px-6">
-                <div className="flex items-baseline translate-y-[15px]">
-                  <span className={`text-black text-[160px] leading-none gost-font mr-2 ${shufflingStates[0] ? 'animate-shuffling' : ''}`}>
+                {/* Текст РФ поднят значительно выше (с -8px на -28px) */}
+                <div className="flex items-baseline translate-y-[-28px]">
+                  <span className={`text-black text-[150px] leading-none gost-font mr-2 ${shufflingStates[0] ? 'animate-shuffling' : ''}`}>
                     {data.firstLetter}
                   </span>
                   <div className="flex items-baseline">
                     {digits.map((digit, idx) => (
-                      <span key={idx} className={`text-black text-[205px] leading-none gost-font ${shufflingStates[idx + 1] ? 'animate-shuffling' : ''}`}>
+                      <span key={idx} className={`text-black text-[185px] leading-none gost-font ${shufflingStates[idx + 1] ? 'animate-shuffling' : ''}`}>
                         {digit}
                       </span>
                     ))}
                   </div>
                   <div className="flex items-baseline ml-2">
-                    <span className={`text-black text-[160px] leading-none gost-font mr-1 ${shufflingStates[5] ? 'animate-shuffling' : ''}`}>
+                    <span className={`text-black text-[150px] leading-none gost-font mr-1 ${shufflingStates[5] ? 'animate-shuffling' : ''}`}>
                       {data.secondLetter}
                     </span>
-                    <span className={`text-black text-[160px] leading-none gost-font ${shufflingStates[6] ? 'animate-shuffling' : ''}`}>
+                    <span className={`text-black text-[150px] leading-none gost-font ${shufflingStates[6] ? 'animate-shuffling' : ''}`}>
                       {data.thirdLetter}
                     </span>
                   </div>
@@ -83,8 +84,9 @@ const LicensePlate: React.FC<LicensePlateProps> = ({ data, shufflingStates }) =>
               </div>
               <div className="w-[4px] bg-black/95 h-full shrink-0" />
               <div className="w-[170px] flex flex-col items-center justify-center h-full bg-transparent">
-                <div className="flex-grow flex items-center justify-center pt-2 translate-y-[15px]">
-                  <span className="text-black text-[105px] leading-none gost-font tracking-tighter">{data.region}</span>
+                {/* Регион РФ тоже поднят значительно выше (с -5px на -20px) */}
+                <div className="flex-grow flex items-center justify-center pt-2 translate-y-[-20px]">
+                  <span className="text-black text-[95px] leading-none gost-font tracking-tighter">{data.region}</span>
                 </div>
                 <div className="flex items-center gap-2 pb-6 pr-2">
                   <span className="text-black text-[24px] font-bold tracking-widest font-sans">RUS</span>
@@ -110,23 +112,22 @@ const LicensePlate: React.FC<LicensePlateProps> = ({ data, shufflingStates }) =>
                  </div>
                  <span className="text-black font-black text-6xl font-sans tracking-tight leading-none">BY</span>
               </div>
-              <div className="flex-grow flex items-center justify-center h-full whitespace-nowrap overflow-visible">
-                <div className="flex items-baseline translate-y-[8px] translate-x-[-25px]">
-                  {/* Цифры опущены (было -24px стало -5px) */}
-                  <div className="flex items-baseline translate-y-[-5px]">
+              <div className="flex-grow flex items-center justify-center h-full whitespace-nowrap">
+                {/* Текст РБ поднят значительно выше (с -12px на -32px) */}
+                <div className="flex items-baseline translate-y-[-32px] translate-x-[-25px]">
+                  <div className="flex items-baseline">
                     {digits.map((digit, idx) => (
-                      <span key={idx} className={`text-black text-[190px] leading-none gost-font ${shufflingStates[idx + 1] ? 'animate-shuffling' : ''}`}>
+                      <span key={idx} className={`text-black text-[175px] leading-none gost-font ${shufflingStates[idx + 1] ? 'animate-shuffling' : ''}`}>
                         {digit}
                       </span>
                     ))}
                   </div>
-                  {/* Буквы также слегка скорректированы для соответствия цифрам (было -12px стало 0px) */}
-                  <div className="flex items-baseline ml-2 translate-y-[0px]">
-                    <span className={`text-black text-[250px] leading-none gost-font ${shufflingStates[5] ? 'animate-shuffling' : ''}`}>{data.secondLetter}</span>
-                    <span className={`text-black text-[250px] leading-none gost-font ${shufflingStates[6] ? 'animate-shuffling' : ''}`}>{data.thirdLetter}</span>
+                  <div className="flex items-baseline ml-2">
+                    <span className={`text-black text-[215px] leading-none gost-font ${shufflingStates[5] ? 'animate-shuffling' : ''}`}>{data.secondLetter}</span>
+                    <span className={`text-black text-[215px] leading-none gost-font ${shufflingStates[6] ? 'animate-shuffling' : ''}`}>{data.thirdLetter}</span>
                   </div>
-                  <span className="text-black text-[110px] font-bold font-sans mx-1 translate-y-[-10px] leading-none">-</span>
-                  <span className="text-black text-[190px] leading-none gost-font translate-y-[0px]">{data.region}</span>
+                  <span className="text-black text-[100px] font-bold font-sans mx-1 translate-y-[-15px] leading-none">-</span>
+                  <span className="text-black text-[175px] leading-none gost-font">{data.region}</span>
                 </div>
               </div>
             </div>
