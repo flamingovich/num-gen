@@ -60,7 +60,6 @@ const LicensePlate: React.FC<LicensePlateProps> = ({ data, shufflingStates }) =>
           {isRU && (
             <div className="relative z-10 w-full h-full flex items-center">
               <div className="flex-grow flex items-center justify-center h-full px-6">
-                {/* Текст РФ поднят значительно выше (с -8px на -28px) */}
                 <div className="flex items-baseline translate-y-[-28px]">
                   <span className={`text-black text-[150px] leading-none gost-font mr-2 ${shufflingStates[0] ? 'animate-shuffling' : ''}`}>
                     {data.firstLetter}
@@ -84,7 +83,6 @@ const LicensePlate: React.FC<LicensePlateProps> = ({ data, shufflingStates }) =>
               </div>
               <div className="w-[4px] bg-black/95 h-full shrink-0" />
               <div className="w-[170px] flex flex-col items-center justify-center h-full bg-transparent">
-                {/* Регион РФ тоже поднят значительно выше (с -5px на -20px) */}
                 <div className="flex-grow flex items-center justify-center pt-2 translate-y-[-20px]">
                   <span className="text-black text-[95px] leading-none gost-font tracking-tighter">{data.region}</span>
                 </div>
@@ -113,8 +111,8 @@ const LicensePlate: React.FC<LicensePlateProps> = ({ data, shufflingStates }) =>
                  <span className="text-black font-black text-6xl font-sans tracking-tight leading-none">BY</span>
               </div>
               <div className="flex-grow flex items-center justify-center h-full whitespace-nowrap">
-                {/* Текст РБ поднят значительно выше (с -12px на -32px) */}
-                <div className="flex items-baseline translate-y-[-32px] translate-x-[-25px]">
+                {/* Подняли еще выше (с -32px на -48px) для компенсации нижнего отступа кастомного шрифта */}
+                <div className="flex items-baseline translate-y-[-48px] translate-x-[-25px]">
                   <div className="flex items-baseline">
                     {digits.map((digit, idx) => (
                       <span key={idx} className={`text-black text-[175px] leading-none gost-font ${shufflingStates[idx + 1] ? 'animate-shuffling' : ''}`}>
